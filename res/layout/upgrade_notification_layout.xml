@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#f1f1f1"
+    android:orientation="horizontal" >
+    
+    <LinearLayout 
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:layout_marginRight="5dp"
+        >
+        <ImageView
+            android:layout_width="64dp"
+            android:padding="8dp"
+            android:layout_height="wrap_content"
+            android:src="@drawable/mic_launcher" />
+    </LinearLayout>
+    
+    <LinearLayout
+        android:id="@+id/upgrade_app_name_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" 
+        android:visibility="gone">
+
+       <TextView
+            android:id="@+id/upgrade_app_name_end"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="8dp"
+            android:textColor="#ff393939"
+            android:textSize="14dip"
+             />
+
+        <TextView
+            android:id="@+id/upgrade_install_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:gravity="center"
+            android:textSize="14dip"
+            android:textColor="#ff393939"
+            android:text="@string/upgrade_downloaded_tip" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/upgrade_progress_text_ll"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="5dp"
+        android:orientation="vertical"
+        android:visibility="gone"
+         >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@anim/upgrade_notification_download" />
+
+        <TextView
+            android:id="@+id/upgrade_progress_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ff393939"
+            android:gravity="center"
+            android:textSize="14dip"
+            android:text="0%" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/upgrade_progressbar_ll"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:layout_marginTop="4dp"
+        android:layout_marginLeft="3dp"
+        android:gravity="center_vertical"
+        android:visibility="gone"
+         >
+
+        <TextView
+            android:id="@+id/upgrade_app_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#ff393939"
+            android:textSize="14dip"
+            android:gravity="center" />
+
+        <ProgressBar
+            android:id="@+id/upgrade_progress_value"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:indeterminate="false"
+            android:max="100" />
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="290dp"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+	<LinearLayout
+	    android:layout_width="290dp"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/upgrade_dialog_bg_rectangle_top"
+	    android:orientation="vertical" >
+	
+	    <RelativeLayout
+	        android:id="@+id/upgrade_rl_top"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/upgrade_color_e05248"
+	        android:gravity="center_horizontal"
+	        android:layout_marginBottom="11dp"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginRight="10dp"
+	        android:layout_marginTop="10dp" >
+	
+	        <TextView
+	            android:id="@+id/upgrade_title"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_alignParentLeft="true"
+	            android:layout_centerVertical="true"
+	            android:text="@string/upgrade_new_version_upgrade"
+	            android:textColor="@color/upgrade_white"
+	            android:textSize="18sp" />
+	    </RelativeLayout>
+	
+	    <ImageView
+	        android:id="@+id/upgrade_iv_divider"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0.5dp"
+	        android:layout_gravity="center_horizontal"
+	        android:background="@drawable/upgrade_dialog_divider" />
+	</LinearLayout>
+	<LinearLayout
+	    android:layout_width="290dp"
+	    android:layout_height="wrap_content"
+	    android:background="@drawable/upgrade_dialog_bg_rectangle_bottom"
+	    android:orientation="vertical" >
+	    <LinearLayout
+	        android:id="@+id/upgrade_ll_content"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/upgrade_white">
+	
+	        <ScrollView
+	            android:id="@+id/upgrade_scrollview"
+	            android:layout_width="fill_parent"
+	            android:layout_height="wrap_content"
+	            android:background="@color/upgrade_white"
+	            android:fadeScrollbars="false"
+	            android:focusable="true"
+	            android:focusableInTouchMode="true"
+	            android:scrollbars="vertical" >
+	
+	            <TextView
+	                android:id="@+id/upgrade_desc_tv"
+	                android:layout_width="wrap_content"
+	                android:layout_height="wrap_content"
+	                android:lineSpacingExtra="7dp"
+	                android:textColor="@color/upgrade_msg_color"
+	                android:textSize="15sp" />
+	        </ScrollView>
+	    </LinearLayout>
+	
+	    <LinearLayout
+	        android:id="@+id/upgrade_ll_bottom"
+	        android:layout_width="fill_parent"
+	        android:layout_height="wrap_content"
+	        android:background="@color/upgrade_white"
+	        android:layout_marginBottom="20dp"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        android:orientation="horizontal"
+	        android:weightSum="2" >
+	
+	        <Button
+	            android:id="@+id/upgrade_cancel"
+	            android:layout_width="0dp"
+	            android:layout_height="37dp"
+	            android:layout_weight="1"
+	            android:background="@drawable/upgrade_dialog_cancel_selector"
+	            android:text="@string/upgrade_cancal"
+	            android:textColor="@color/upgrade_white"
+	            android:textSize="15sp" />
+	
+	        <Button
+	            android:id="@+id/upgrade_confirm"
+	            android:layout_width="0dp"
+	            android:layout_height="37dp"
+	            android:layout_marginLeft="16dp"
+	            android:layout_weight="1"
+	            android:background="@drawable/upgrade_dialog_confirm_selector"
+	            android:text="@string/upgrade_now"
+	            android:textColor="@color/upgrade_white"
+	            android:textSize="15sp" />
+	    </LinearLayout>
+	
+	    
+	     <ImageView
+	        android:id="@+id/upgrade_iv_divider_two"
+	        android:layout_width="fill_parent"
+	        android:layout_height="0.5dp"
+	        android:layout_gravity="center_horizontal"
+	        android:layout_marginLeft="5dp"
+	        android:layout_marginRight="5dp"
+	        android:background="@drawable/upgrade_dialog_divider" />
+	    <RelativeLayout
+	        android:id="@+id/upgrade_rl_center"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_marginBottom="15dp"
+	        android:layout_marginLeft="15dp"
+	        android:layout_marginRight="15dp"
+	        android:layout_marginTop="14dp" >
+	
+	        <TextView
+	            android:id="@+id/upgrade_tv_tip"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_marginBottom="15dp"
+	            android:textColor="@color/upgrade_msg_color"
+	            android:textSize="14sp" />
+	
+	        <ListView
+	            android:id="@+id/upgrade_related_app_list"
+	            android:layout_width="wrap_content"
+	            android:layout_height="wrap_content"
+	            android:layout_below="@id/upgrade_tv_tip"
+	            android:cacheColorHint="#00000000"
+	            android:divider="#00000000"
+	            android:dividerHeight="1dp"
+	            android:fadingEdge="none"
+	            android:focusable="true"
+	            android:listSelector="#00000000" >
+	        </ListView>
+	    </RelativeLayout>
+	</LinearLayout>
+</LinearLayout>

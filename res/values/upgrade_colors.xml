@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <color name="upgrade_color_e05248">#e05248</color>
+    
+    <color name="upgrade_white">#FFFFFFFF</color>
+    
+     <color name="upgrade_msg_color">#6d6d6d</color>
+    
+    <drawable name="upgrade_dialog_divider">#a1a1a1</drawable>
+</resources>

@@ -1,0 +1,58 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="${relativePackage}.${activityClass}" >
+
+	 <ViewFlipper 
+     	android:id="@+id/viewFlipper"
+        android:layout_width="fill_parent" 
+        android:layout_height="fill_parent">
+        <!-- 第一个页面 -->
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" 
+            android:gravity="center">
+            <ImageView 
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:scaleType="fitXY"
+                android:src="@drawable/haibao1" />
+        </LinearLayout>
+        <!-- 第二个页面 -->
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" 
+            android:gravity="center">
+            <ImageView 
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:scaleType="fitXY"
+                android:src="@drawable/haibao2"
+                android:gravity="center" />
+        </LinearLayout>
+        <!-- 第三个页面 -->
+        <LinearLayout 
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" 
+            android:gravity="center">
+ 
+            <ImageView 
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent" 
+                android:scaleType="fitXY"
+                android:src="@drawable/haibao3"
+                android:gravity="center" />
+        </LinearLayout>
+    </ViewFlipper>
+    <com.lxsj.NavigationPoint 
+        android:id="@+id/navigetionPoint"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+		android:layout_centerHorizontal="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="60dp"
+        color="0x000079"
+        justPoint="false"
+        pointNumber="3"/>
+</RelativeLayout>

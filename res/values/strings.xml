@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">一起上头条</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_base">BaseActivity</string>
+    <string name="title_activity_type_name">TypeNameActivity</string>
+    <string name="title_activity_head_line">HeadLineActivity</string>
+    <string name="title_activity_news_show">NewsShowActivity</string>
+    <string name="title_activity_wxentry">WXEntryActivity</string>
+    <!-- java 文件中的字符串 -->
+    <string name="no_internet_connnect">无网络连接</string>
+    <string name="internet_exception">网络异常</string>
+    <string name="connect_server_timeout">连接服务器超时</string>
+    <string name="name_cannot_use">输入的名字中包含特殊字符，请重新输入</string>
+    <string name="input_alert">请输入2~15个字</string>
+    <string name="cannot_get_version">无法获取版本信息</string>
+    <!-- activty 的xml使用字符串 -->
+    <string name="title_list">头条列表</string>
+    <string name="news_page">新闻主页</string>
+    <string name="share_now">——————立马分享  马上装逼——————</string>
+    <string name="aler">——————友情提醒  请君注意——————</string>
+    <string name="aler_message">本APP仅供茶余饭后娱乐之用，内容均属虚构，请勿入戏太深不可自拔；装逼有风险，
+       							 建议服用镇定剂准备迎接赞美或挨骂；向本文虚构内容中涉及的真人、事、物致敬，
+      							  一切皆出于娱乐大众之需，如涉侵权望及时告知。</string>
+    <!-- others -->
+    <string name="change_name_confirm">确认改名</string>
+    <string name="change_name_cancel">取消改名</string>
+    <string name="sure_message">好的</string>
+    <string name="title_activity_first_setup">FirstSetupActivity</string>
+    <string name="title_activity_image_choice">ImageChoiceActivity</string>
+    <string name="title_activity_show_image">ShowImageActivity</string>
+    <string name="title_activity_tab_line">TabLineActivity</string>
+
+</resources>

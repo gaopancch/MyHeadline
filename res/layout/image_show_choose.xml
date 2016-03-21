@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+	<com.lxsj.myheadline.imagescan.MyImageView
+        android:id="@+id/child_image"
+        android:background="@drawable/mic_launcher"
+        android:paddingLeft="10dip"
+        android:paddingRight="10dip"
+        android:paddingTop="10dip"
+        android:paddingBottom="10dip"
+        android:scaleType="fitXY"
+        android:layout_width="fill_parent"
+        android:layout_height="100dip" />
+<!--    <android.support.v7.widget.AppCompatCheckBox
+        android:id="@+id/child_checkbox"
+        android:layout_width="30dp"
+        android:layout_height="30dp" />-->
+</RelativeLayout>

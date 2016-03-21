@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <string name="upgrade_toast_sdcard_lower">sd卡空间不足，请删除无用文件升级新版本</string>
+    <string name="upgrade_update_finish">下载完成</string>
+    <string name="upgrade_update_finish_install">下载完成，请点击安装</string>
+    <string name="upgrade_update_asynctask_downloading">正在下载</string>
+    <string name="upgrade_net_null">网络异常</string>
+    <string name="upgrade_updatedownload_asynctask">正在下载安装包 </string>
+    
+    <!-- upgrade dialog -->
+    <string name="upgrade_now">立即升级</string>
+    <string name="upgrade_cancal">暂不升级</string>
+    <string name="upgrade_exit">退出</string>
+    <string name="upgrade_new_version_upgrade">新版本升级</string>
+
+    <!-- setting check dialog -->
+    <string name="upgrade_dialog_default_title">提示</string>
+    <string name="upgrade_dialog_default_ok">确定</string>
+    <string name="upgrade_dialog_default_msg">当前版本 V<xliff:g id="version">%s</xliff:g>，已经是最新版了</string>
+    <string name="upgrade_dialog_loading_fail">加载失败</string>
+    <string name="upgrade_already_update">已经开始更新，请等待。</string>
+
+    <!-- 静默新增 -->
+    <string name="upgrade_downloaded_tip">下载完成，请点击安装</string>
+    <string name="upgrade_silent_host_downloaded_tip">新版本更给力，点击升级！</string>
+    <string name="upgrade_silent_releated_downloaded_tip">最火应用，点击试用</string>
+    <string name="upgrade_downloaded_finishing_slience">下载完成，安装中...</string>
+    <string name="upgrade_downloaded_tip_remote_tip">零流量免费体验V5.5新版本！</string>
+
+</resources>
