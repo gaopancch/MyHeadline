@@ -351,7 +351,7 @@ int id LinearLayoutBoy 0x7f0b00b2
 int id LinearLayoutGirl 0x7f0b00b4
 int id LinearLayoutTabAll 0x7f0b00b0
 int id _msgFindPass 0x7f0b0022
-int id action_settings 0x7f0b00cd
+int id action_settings 0x7f0b00d2
 int id alert 0x7f0b0014
 int id alertSureButton 0x7f0b0021
 int id alertText 0x7f0b0020
@@ -371,6 +371,7 @@ int id button_confirm 0x7f0b001b
 int id button_panel 0x7f0b004e
 int id changeName 0x7f0b0006
 int id changeNameText 0x7f0b001d
+int id changeSecondText 0x7f0b00d0
 int id child_grid 0x7f0b0016
 int id child_image 0x7f0b002f
 int id comment 0x7f0b0010
@@ -421,6 +422,8 @@ int id main_grid 0x7f0b0003
 int id msgFindPass 0x7f0b0023
 int id msgFindPassButton 0x7f0b0024
 int id msgFindPass_t 0x7f0b0026
+int id nameAlertText 0x7f0b00ce
+int id nameText 0x7f0b00cd
 int id navigetionPoint 0x7f0b0001
 int id net_error_flag 0x7f0b0054
 int id newsShowProgressBar 0x7f0b0015
@@ -457,6 +460,8 @@ int id register_indicator 0x7f0b0065
 int id register_send_msg_now 0x7f0b006a
 int id register_tab_item_text 0x7f0b007b
 int id register_viewpager 0x7f0b0066
+int id secondAlertText 0x7f0b00d1
+int id secondText 0x7f0b00cf
 int id select_cancel_ll 0x7f0b00a1
 int id send_btn 0x7f0b0029
 int id share_cancel 0x7f0b0097
@@ -596,7 +601,8 @@ int layout tab3 0x7f030027
 int layout upgrade_dialog_list_item 0x7f030028
 int layout upgrade_dialog_view 0x7f030029
 int layout upgrade_notification_layout 0x7f03002a
-int layout weixin_entry_activity 0x7f03002b
+int layout v2change_name_dialog 0x7f03002b
+int layout weixin_entry_activity 0x7f03002c
 int menu main 0x7f0a0000
 int string account_pwd_error 0x7f060076
 int string action_settings 0x7f060004

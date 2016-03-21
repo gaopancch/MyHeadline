@@ -95,15 +95,21 @@ public class NewsShowActivity extends BaseActivity implements Response {
 	private int plaformId = 0;// 分享平台 id 1:wechat 2:comment 3:qq 4:weibo
 	private ProgressBar checkNameProgress;
 	private String name;// 该参数解决改名后乱码问题
+	private String secondStr;
 	private String imageUrl;
 	private boolean isClickTest = false;
 	private static int LOAD_IMAGE = 1;
-
+	private Dialog changeDialog;
+	private boolean nameDetectResult=false;
+	private boolean secondDetectResult=false;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_news_show);
 		mContext = this;
+		changeDialog = new Dialog(this);
+		changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		findViews();
 		initNewsData();
 		// 把QQ分享用到的图片搞到本地
@@ -167,7 +173,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 					finish();
 					break;
 				case R.id.changeName:
-					changeName();
+					changeNameV2();
 					break;
 				case R.id.weixinFriend:
 					plaformId = 1;
@@ -237,59 +243,122 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		text.setText(Html.fromHtml(newsText));
 	}
 
-	private void changeName() {
+//	private void changeName() {
+//		LayoutInflater inflater2 = LayoutInflater.from(this);
+//		View view = inflater2.inflate(R.layout.change_name_dialog, null);
+//		final EditText tv = (EditText) view.findViewById(R.id.changeNameText);
+//		Button btSure = (Button) view.findViewById(R.id.butSurChange);
+//		Button btCancel = (Button) view.findViewById(R.id.butCancelChange);
+//		final Dialog dialog = new Dialog(this);
+//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		dialog.setContentView(view);
+//		dialog.show();
+//		btSure.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//
+//				name = tv.getText().toString();
+//				if (name.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*",
+//						"").length() != 0) {
+//					UtilMethod.showDialog(mContext,
+//							getResources().getString(R.string.name_cannot_use));
+//				} else {
+//					// 不包含特殊字符
+//					if ("".equalsIgnoreCase(name)) {
+//						UtilMethod.showDialog(mContext, getResources()
+//								.getString(R.string.input_alert));
+//					} else if (name.contains(" ")) {
+//						UtilMethod.showDialog(mContext, getResources()
+//								.getString(R.string.name_cannot_use));
+//					} else {
+//						try {
+//							String nameRequest = new String(name.getBytes(),
+//									"utf-8");
+//							nameRequest = URLEncoder.encode(name, "UTF-8"); // "UTF-8"
+//							requestGet(nameRequest, dialog);
+//						} catch (UnsupportedEncodingException e) {
+//							// TODO Auto-generated catch block
+//							e.printStackTrace();
+//						}
+//					}
+//				}
+//			}
+//		});
+//
+//		btCancel.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				dialog.dismiss();
+//			}
+//		});
+//	}
+
+	private void changeNameV2() {
 		LayoutInflater inflater2 = LayoutInflater.from(this);
-		View view = inflater2.inflate(R.layout.change_name_dialog, null);
-		final EditText tv = (EditText) view.findViewById(R.id.changeNameText);
+		View view = inflater2.inflate(R.layout.v2change_name_dialog, null);
+		final EditText etvName = (EditText) view.findViewById(R.id.changeNameText);
+		final EditText etvSecond=(EditText) view.findViewById(R.id.changeSecondText);
+		final TextView tvNameAlert=(TextView)view.findViewById(R.id.nameAlertText);
+		final TextView tvSecondAlert=(TextView)view.findViewById(R.id.secondAlertText);
 		Button btSure = (Button) view.findViewById(R.id.butSurChange);
-		Button btCancel = (Button) view.findViewById(R.id.butCancelChange);
-		final Dialog dialog = new Dialog(this);
-		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		dialog.setContentView(view);
-		dialog.show();
+		changeDialog.setContentView(view);
+		changeDialog.show();
 		btSure.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-
-				name = tv.getText().toString();
-				if (name.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*",
-						"").length() != 0) {
-					UtilMethod.showDialog(mContext,
-							getResources().getString(R.string.name_cannot_use));
-				} else {
-					// 不包含特殊字符
-					if ("".equalsIgnoreCase(name)) {
-						UtilMethod.showDialog(mContext, getResources()
-								.getString(R.string.input_alert));
-					} else if (name.contains(" ")) {
-						UtilMethod.showDialog(mContext, getResources()
-								.getString(R.string.name_cannot_use));
-					} else {
-						try {
-							String nameRequest = new String(name.getBytes(),
-									"utf-8");
-							nameRequest = URLEncoder.encode(name, "UTF-8"); // "UTF-8"
-							requestGet(nameRequest, dialog);
-						} catch (UnsupportedEncodingException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-					}
-				}
-			}
-		});
-
-		btCancel.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				dialog.dismiss();
+				nameDetectResult=false;
+				secondDetectResult=false;
+				name = etvName.getText().toString();
+				tvNameAlert.setText("");//
+				detectStringFromServer(name,tvNameAlert,nameDetectResult,0);
+				
+				secondStr=etvSecond.getText().toString();
+				tvSecondAlert.setText("");
+				detectStringFromServer(secondStr,tvSecondAlert,secondDetectResult,1);
 			}
 		});
 	}
-
+	
+	private void detectStringFromServer(String str,TextView textView,boolean detectRet,int c){
+		if (str.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*",
+				"").length() != 0) {
+//			UtilMethod.showDialog(mContext,
+//					getResources().getString(R.string.name_cannot_use));
+			textView.setText(getResources().getString(R.string.name_cannot_use));
+			detectRet=false;
+		} else {
+			// 不包含特殊字符
+			if ("".equalsIgnoreCase(str)) {
+//				UtilMethod.showDialog(mContext, getResources()
+//						.getString(R.string.input_alert));
+				textView.setText(getResources()
+						.getString(R.string.input_alert));
+				detectRet=false;
+			} else if (str.contains(" ")) {
+//				UtilMethod.showDialog(mContext, getResources()
+//						.getString(R.string.name_cannot_use));
+				textView.setText(getResources()
+						.getString(R.string.name_cannot_use));
+				detectRet=false;
+			} else {
+				try {
+					String nameRequest = new String(str.getBytes(),
+							"utf-8");
+					nameRequest = URLEncoder.encode(str, "UTF-8"); // "UTF-8"
+					requestGet(nameRequest, textView,c);
+				} catch (UnsupportedEncodingException e) {
+					// TODO Auto-generated catch block
+					detectRet=false;
+					e.printStackTrace();
+				}
+			}
+		}
+	}
+	
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mWeiboShareAPI.handleWeiboResponse(intent, this);
@@ -312,7 +381,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		}
 	}
 
-	private void requestGet(final String iname, final Dialog dialog)
+	private void requestGet(final String iname, final TextView textView,final int catory)
 			throws UnsupportedEncodingException {
 		checkNameProgress.setVisibility(View.VISIBLE);
 		final DataGetRequest request = new DataGetRequest();
@@ -327,11 +396,21 @@ public class NewsShowActivity extends BaseActivity implements Response {
 							.unmarshalFromString(data.toString(),
 									ApiCommonJsonResponse.class);
 					if (response.isRet()) {
+						if(catory==0){//name
+							nameDetectResult=true;
+						}else{//second
+							secondDetectResult=true;
+						}
 						application.setName(name);
 						setDataMapBeanTopage(dataMapBean);
-						dialog.dismiss();
+						if(nameDetectResult&&secondDetectResult){				
+							changeDialog.dismiss();
+						}
+						
 					} else {
-						UtilMethod.showDialog(mContext, response.getErrMsg()
+//						UtilMethod.showDialog(mContext, response.getErrMsg()
+//								.toString());
+						textView.setText(response.getErrMsg()
 								.toString());
 					}
 				}

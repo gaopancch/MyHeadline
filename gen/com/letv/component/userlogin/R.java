@@ -315,7 +315,7 @@ public final class R {
 	}
 	public static final class id {
 		public static final int _msgFindPass = 0x7f0b0022;
-		public static final int action_settings = 0x7f0b00cd;
+		public static final int action_settings = 0x7f0b00d2;
 		public static final int alert_title = 0x7f0b0046;
 		public static final int back = 0x7f0b0004;
 		public static final int back_iv = 0x7f0b0040;
@@ -476,7 +476,7 @@ public final class R {
 		public static final int share_dialog = 0x7f030022;
 		public static final int share_menu_dialog = 0x7f030023;
 		public static final int sina_share_dialog = 0x7f030024;
-		public static final int weixin_entry_activity = 0x7f03002b;
+		public static final int weixin_entry_activity = 0x7f03002c;
 	}
 	public static final class menu {
 		public static final int main = 0x7f0a0000;

@@ -410,7 +410,7 @@ public final class R {
         public static final int LinearLayoutGirl=0x7f0b00b4;
         public static final int LinearLayoutTabAll=0x7f0b00b0;
         public static final int _msgFindPass=0x7f0b0022;
-        public static final int action_settings=0x7f0b00cd;
+        public static final int action_settings=0x7f0b00d2;
         public static final int alert=0x7f0b0014;
         public static final int alertSureButton=0x7f0b0021;
         public static final int alertText=0x7f0b0020;
@@ -430,6 +430,7 @@ public final class R {
         public static final int button_panel=0x7f0b004e;
         public static final int changeName=0x7f0b0006;
         public static final int changeNameText=0x7f0b001d;
+        public static final int changeSecondText=0x7f0b00d0;
         public static final int child_grid=0x7f0b0016;
         public static final int child_image=0x7f0b002f;
         public static final int comment=0x7f0b0010;
@@ -480,6 +481,8 @@ public final class R {
         public static final int msgFindPass=0x7f0b0023;
         public static final int msgFindPassButton=0x7f0b0024;
         public static final int msgFindPass_t=0x7f0b0026;
+        public static final int nameAlertText=0x7f0b00ce;
+        public static final int nameText=0x7f0b00cd;
         public static final int navigetionPoint=0x7f0b0001;
         public static final int net_error_flag=0x7f0b0054;
         public static final int newsShowProgressBar=0x7f0b0015;
@@ -516,6 +519,8 @@ public final class R {
         public static final int register_send_msg_now=0x7f0b006a;
         public static final int register_tab_item_text=0x7f0b007b;
         public static final int register_viewpager=0x7f0b0066;
+        public static final int secondAlertText=0x7f0b00d1;
+        public static final int secondText=0x7f0b00cf;
         public static final int select_cancel_ll=0x7f0b00a1;
         public static final int send_btn=0x7f0b0029;
         public static final int share_cancel=0x7f0b0097;
@@ -657,7 +662,8 @@ public final class R {
         public static final int upgrade_dialog_list_item=0x7f030028;
         public static final int upgrade_dialog_view=0x7f030029;
         public static final int upgrade_notification_layout=0x7f03002a;
-        public static final int weixin_entry_activity=0x7f03002b;
+        public static final int v2change_name_dialog=0x7f03002b;
+        public static final int weixin_entry_activity=0x7f03002c;
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
