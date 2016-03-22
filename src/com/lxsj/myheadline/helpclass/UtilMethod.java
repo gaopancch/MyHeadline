@@ -1,5 +1,8 @@
 package com.lxsj.myheadline.helpclass;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
@@ -10,6 +13,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Environment;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -26,8 +30,10 @@ public class UtilMethod {
 	
 
     
-	public static String changeColor(String inStr,String color){
-		return "<font color=\""+color+"\">"+inStr+"</font>";
+	public static String changeColorAndAddClickable(String inStr,String color){
+		
+		return "<font color=\""+color+"\"><clickable>"+inStr+"</clickable></font>";
+//		return "<clickable>"+inStr+"</clickable>";
 	}
 	
 	public static void  showDialog(Context context,String message) {
@@ -74,5 +80,29 @@ public class UtilMethod {
 			e.printStackTrace();
 		}
 		return imageBitmap;
+	}
+	
+	public static void saveBitmapToNative(Bitmap bm) {
+		try {
+			File file = new File(Environment.getExternalStorageDirectory()
+					+ "/newsDataFile" + File.separator + "qqshareimage.png");
+			if (!file.getParentFile().exists()) {
+				file.getParentFile().mkdirs();
+			}
+
+			if (!file.exists()) {
+				file.createNewFile();
+			}
+			FileOutputStream out = new FileOutputStream(file);
+			bm.compress(Bitmap.CompressFormat.PNG, 90, out);
+			out.flush();
+			out.close();
+		} catch (FileNotFoundException e) {
+			Log.i(UtilMethod.TAG, "FileNotFoundException");
+			e.printStackTrace();
+		} catch (IOException e) {
+			Log.i(UtilMethod.TAG, "IOException");
+			e.printStackTrace();
+		}
 	}
 }

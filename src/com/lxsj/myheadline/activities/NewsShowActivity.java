@@ -1,13 +1,9 @@
 package com.lxsj.myheadline.activities;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -17,6 +13,8 @@ import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Map;
+
+import org.xml.sax.XMLReader;
 
 import com.baidu.mobstat.StatService;
 import com.letv.component.share.ShareManager;
@@ -47,14 +45,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.LinearGradient;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.text.Editable;
 import android.text.Html;
 import android.text.Spannable;
+import android.text.Spanned;
+import android.text.Html.TagHandler;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -66,6 +69,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -100,8 +104,12 @@ public class NewsShowActivity extends BaseActivity implements Response {
 	private boolean isClickTest = false;
 	private static int LOAD_IMAGE = 1;
 	private Dialog changeDialog;
+	private Dialog shareDialog;
 	private boolean nameDetectResult=false;
 	private boolean secondDetectResult=false;
+	private TextView guideText;
+	private LinearLayout guideLinearLayout;
+	private ImageButton guideButtonCancel;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +117,8 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		setContentView(R.layout.activity_news_show);
 		mContext = this;
 		changeDialog = new Dialog(this);
+		shareDialog = new Dialog(this);
+		shareDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		changeDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		findViews();
 		initNewsData();
@@ -116,6 +126,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		// saveBitmapToNative(shareBitmap);
 		// imageUrl = Environment.getExternalStorageDirectory()
 		// + "/newsDataFile" + File.separator + "qqshareimage.png";
+		shareInadeately();
 	}
 
 	private void initNewsData() {
@@ -127,12 +138,13 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		title.setText(titleString);
 		time.setText(getDataTime());//
 		newsText = dataMapBean.getText().toString()
-				.replaceAll(nowName, UtilMethod.changeColor(application.getName().toString(), "red"));
+				.replaceAll(nowName, UtilMethod.changeColorAndAddClickable(application.getName().toString(), "red"));
 		
 		dataMapBean.setText(newsText);
 		nowName = application.getName().toString();
-		text.setText(Html.fromHtml(newsText));//set with Html.fromHtml to show the color
-		
+		text.setText(Html.fromHtml(newsText,null,new ClickableTagHandler(this)));//set with Html.fromHtml to show the color
+		text.setClickable(true);
+		text.setMovementMethod(LinkMovementMethod.getInstance());
 		commentsNumber.setText("评论数：" + dataMapBean.getCommentNumber());
 		new Thread(new Runnable() {
 
@@ -145,22 +157,24 @@ public class NewsShowActivity extends BaseActivity implements Response {
 					image.setImageBitmap(textBitmap);
 				}
 				// 把QQ分享用到的图片搞到本地
-				saveBitmapToNative(textBitmap);
+				UtilMethod.saveBitmapToNative(textBitmap);
 				imageUrl = Environment.getExternalStorageDirectory()
 						+ "/newsDataFile" + File.separator + "qqshareimage.png";
 			}
 		}).start();
-		image.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent();
-				intent.setClass(NewsShowActivity.this,
-						ImageChoiceActivity.class);
-				startActivity(intent);
-			}
-		});
+		
+		//自己选择图片？
+//		image.setOnClickListener(new OnClickListener() {
+//
+//			@Override
+//			public void onClick(View v) {
+//				// TODO Auto-generated method stub
+//				Intent intent = new Intent();
+//				intent.setClass(NewsShowActivity.this,
+//						ImageChoiceActivity.class);
+//				startActivity(intent);
+//			}
+//		});
 	}
 
 	private void setOnClicListener() {
@@ -175,21 +189,31 @@ public class NewsShowActivity extends BaseActivity implements Response {
 				case R.id.changeName:
 					changeNameV2();
 					break;
+				case R.id.weixinFriendNow:
 				case R.id.weixinFriend:
 					plaformId = 1;
 					requestGetForTargetUrl();
 					break;
+				case R.id.commentNow:
 				case R.id.comment:
 					plaformId = 2;
 					requestGetForTargetUrl();
 					break;
+					
+				case R.id.qqButtonNow:
 				case R.id.qqButtom:
 					plaformId = 3;
 					requestGetForTargetUrl();
 					break;
+				case R.id.weiboButtonNow:
 				case R.id.weiboButton:
 					plaformId = 4;
 					requestGetForTargetUrl();
+					break;
+				case R.id.guidText:
+				case R.id.guideButtonCancel:
+				//	guideText.setVisibility(View.INVISIBLE);
+					guideLinearLayout.setVisibility(View.INVISIBLE);
 					break;
 				default:
 					break;
@@ -202,6 +226,8 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		weiboButton.setOnClickListener(buttonClickListener);
 		weixinFriendButton.setOnClickListener(buttonClickListener);
 		weixinCommentButton.setOnClickListener(buttonClickListener);
+		guideButtonCancel.setOnClickListener(buttonClickListener);
+		guideText.setOnClickListener(buttonClickListener);
 
 	}
 
@@ -211,6 +237,9 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		title = (TextView) findViewById(R.id.textTitle);
 		time = (TextView) findViewById(R.id.textTime);
 		text = (TextView) findViewById(R.id.textReal);
+		guideLinearLayout=(LinearLayout)findViewById(R.id.guideLinearLayout);
+		guideText=(TextView)findViewById(R.id.guidText);
+		guideButtonCancel=(ImageButton)findViewById(R.id.guideButtonCancel);
 		commentsNumber = (TextView) findViewById(R.id.commentNumber);
 		image = (ImageView) findViewById(R.id.textImage);
 		qqButton = (ImageButton) findViewById(R.id.qqButtom);
@@ -304,6 +333,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		final TextView tvNameAlert=(TextView)view.findViewById(R.id.nameAlertText);
 		final TextView tvSecondAlert=(TextView)view.findViewById(R.id.secondAlertText);
 		Button btSure = (Button) view.findViewById(R.id.butSurChange);
+		changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.circle_bg);
 		changeDialog.setContentView(view);
 		changeDialog.show();
 		btSure.setOnClickListener(new OnClickListener() {
@@ -321,6 +351,22 @@ public class NewsShowActivity extends BaseActivity implements Response {
 				detectStringFromServer(secondStr,tvSecondAlert,secondDetectResult,1);
 			}
 		});
+	}
+	
+	private void shareInadeately() {
+		LayoutInflater inflater2 = LayoutInflater.from(this);
+		View view = inflater2.inflate(R.layout.share_imadelately, null);
+		ImageButton btWX = (ImageButton) view.findViewById(R.id.weixinFriendNow);
+		ImageButton btWxComment=(ImageButton)view.findViewById(R.id.commentNow);
+		ImageButton btQq=(ImageButton)view.findViewById(R.id.qqButtonNow);
+		ImageButton btSina=(ImageButton)view.findViewById(R.id.weiboButtonNow);
+		shareDialog.getWindow().setBackgroundDrawableResource(R.drawable.circle_bg);
+		shareDialog.setContentView(view);
+		shareDialog.show();
+		btWX.setOnClickListener(buttonClickListener);
+		btWxComment.setOnClickListener(buttonClickListener);
+		btSina.setOnClickListener(buttonClickListener);
+		btQq.setOnClickListener(buttonClickListener);
 	}
 	
 	private void detectStringFromServer(String str,TextView textView,boolean detectRet,int c){
@@ -552,29 +598,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		return thumbBmp2;
 	}
 
-	private void saveBitmapToNative(Bitmap bm) {
-		try {
-			File file = new File(Environment.getExternalStorageDirectory()
-					+ "/newsDataFile" + File.separator + "qqshareimage.png");
-			if (!file.getParentFile().exists()) {
-				file.getParentFile().mkdirs();
-			}
 
-			if (!file.exists()) {
-				file.createNewFile();
-			}
-			FileOutputStream out = new FileOutputStream(file);
-			bm.compress(Bitmap.CompressFormat.PNG, 90, out);
-			out.flush();
-			out.close();
-		} catch (FileNotFoundException e) {
-			Log.i(UtilMethod.TAG, "FileNotFoundException");
-			e.printStackTrace();
-		} catch (IOException e) {
-			Log.i(UtilMethod.TAG, "IOException");
-			e.printStackTrace();
-		}
-	}
 
 	public static Bitmap returnBitMap(String url) {
 		URL myFileUrl = null;
@@ -622,16 +646,33 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		}
 	};
 	
-    private   static   class  ChangeClickSpan extends ClickableSpan{     
-        
-        private  String mUrl;     
-        ChangeClickSpan(String url) {     
-           mUrl  = url;     
-       }     
-       @Override  
-        public   void  onClick(View widget) {  
-            //  TODO Auto-generated method stub   
-    	   Log.i("gaopan", "ChangeClickSpan"+mUrl);
-       }     
-   }  
+	public class ClickableTagHandler implements TagHandler {
+		private int sIndex = 0;
+		private int eIndex = 0;
+
+		public ClickableTagHandler(Context context) {
+			mContext = context;
+		}
+
+		@Override
+		public void handleTag(boolean opening, String tag, Editable output,
+				XMLReader xmlReader) {
+			if (tag.toLowerCase().equals("clickable")) {
+				if (opening) {
+					sIndex = output.length();
+				} else {
+					eIndex = output.length();
+					output.setSpan(new MxgsaSpan(), sIndex, eIndex,
+							Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
+			}
+		}
+	}
+	public class MxgsaSpan extends ClickableSpan implements OnClickListener {
+
+		@Override
+		public void onClick(View widget) {
+			changeNameV2();
+		}
+	}
 }

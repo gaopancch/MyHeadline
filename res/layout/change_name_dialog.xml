@@ -3,8 +3,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center_horizontal"
-    android:background="#ffffff"   
     android:gravity="center"
+    android:background="@drawable/circle_bg"
     android:orientation="vertical" >
 
     <EditText

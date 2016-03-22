@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/zhuangbi"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/textReal"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:gravity="center"
+        android:text="@string/share_now"
+        android:textColor="#B5B5B5"
+        android:textSize="18dp" />
+
+    <LinearLayout
+        android:id="@+id/buttonContainerNow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/zhuangbi"
+        android:gravity="center" >
+
+        <ImageButton
+            android:id="@+id/weixinFriendNow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/local_weixin"
+            android:gravity="center" />
+
+        <ImageButton
+            android:id="@+id/commentNow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/local_comment" />
+
+        <ImageButton
+            android:id="@+id/qqButtonNow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/local_qq" />
+
+        <ImageButton
+            android:id="@+id/weiboButtonNow"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/local_weibo" />
+    </LinearLayout>
+
+</LinearLayout>

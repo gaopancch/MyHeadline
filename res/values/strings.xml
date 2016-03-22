@@ -27,6 +27,7 @@
     <string name="change_name_confirm">确认改名</string>
     <string name="change_name_cancel">取消改名</string>
     <string name="sure_message">好的</string>
+    <string name="guideText">点击发光的文字，即刻订制头条！</string>
     <string name="title_activity_first_setup">FirstSetupActivity</string>
     <string name="title_activity_image_choice">ImageChoiceActivity</string>
     <string name="title_activity_show_image">ShowImageActivity</string>
