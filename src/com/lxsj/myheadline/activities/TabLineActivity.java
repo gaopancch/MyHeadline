@@ -189,15 +189,8 @@ public class TabLineActivity extends BaseActivity {
 								Information information = JsonUtils
 										.unmarshalFromString(list.get(i)
 												.toString(), Information.class);
-								MapBean mapBean = new MapBean();
-								mapBean.setTitle(information.getTitle());
-								mapBean.setCommentNumber(information
-										.getTotalcomment() + "");
-								mapBean.setText(information.getContent());
-								mapBean.setTitle2(information.getSummary());
-								mapBean.setImageUrl(information.getImageurl());
-								mapBean.setId(information.getId());
-								item.put("item" + i, mapBean);
+								item.put("item" + i, 
+										UtilMethod.informationToMapBean(information));
 							}
 							newsData.put(categoryList.get(j), item);
 						}

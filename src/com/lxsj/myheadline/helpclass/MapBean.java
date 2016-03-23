@@ -19,6 +19,15 @@ public class MapBean implements Parcelable,Serializable {
 	private long id=0;
 	private int position=0;
 	private int assort=0;//0 common  1 man  2 woman
+	private int filed=14;
+	
+	public void setFiled(int str){
+		filed=str;
+	}
+	
+	public int getFiled(){
+		return filed;
+	}
 	
 	public void setAssort(int ass){
 		assort=ass;
@@ -120,10 +129,11 @@ public class MapBean implements Parcelable,Serializable {
 		dest.writeString(summary);
 		dest.writeString(text);
 //		dest.writeString(targetUrl);
-		dest.writeString(appName);
+		dest.writeInt(filed);
 		dest.writeLong(id);
 		dest.writeInt(position);
 		dest.writeInt(assort);
+		dest.writeString(appName);
 	}
 
 	public static final Parcelable.Creator<MapBean> CREATOR = new Creator<MapBean>() {
@@ -138,10 +148,11 @@ public class MapBean implements Parcelable,Serializable {
 			mMapBeann.summary=source.readString();
 			mMapBeann.text=source.readString();
 //			mMapBeann.targetUrl=source.readString();
-			mMapBeann.appName=source.readString();
+			mMapBeann.filed=source.readInt();
 			mMapBeann.id = source.readLong();
 			mMapBeann.position=source.readInt();
 			mMapBeann.assort=source.readInt();
+			mMapBeann.appName=source.readString();
 			return mMapBeann;
 		}
 

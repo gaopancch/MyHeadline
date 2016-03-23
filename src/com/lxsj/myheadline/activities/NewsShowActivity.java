@@ -105,12 +105,14 @@ public class NewsShowActivity extends BaseActivity implements Response {
 	private static int LOAD_IMAGE = 1;
 	private Dialog changeDialog;
 	private Dialog shareDialog;
-	private boolean nameDetectResult=false;
-	private boolean secondDetectResult=false;
+	private boolean nameDetectResult = false;
+	private boolean secondDetectResult = false;
 	private TextView guideText;
 	private LinearLayout guideLinearLayout;
 	private ImageButton guideButtonCancel;
-	
+	private int mFiled = 1;// 需要修改名字或学校等的字段码
+	private String secondFiled = null;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -130,24 +132,9 @@ public class NewsShowActivity extends BaseActivity implements Response {
 	}
 
 	private void initNewsData() {
-		dataMapBean = (MapBean) getIntent().getParcelableExtra("mapBean");//get data from former intent
-		titleString = dataMapBean.getTitle2().toString()
-				.replaceAll(nowName, application.getName().toString());
-		dataMapBean.setTitle2(titleString);
-//		Html.fromHtml("<font color=\"red\">Hello wold<font>");
-		title.setText(titleString);
-		time.setText(getDataTime());//
-		newsText = dataMapBean.getText().toString()
-				.replaceAll(nowName, UtilMethod.changeColorAndAddClickable(application.getName().toString(), "red"));
-		
-		dataMapBean.setText(newsText);
-		nowName = application.getName().toString();
-		text.setText(Html.fromHtml(newsText,null,new ClickableTagHandler(this)));//set with Html.fromHtml to show the color
-		text.setClickable(true);
-		text.setMovementMethod(LinkMovementMethod.getInstance());
-		commentsNumber.setText("评论数：" + dataMapBean.getCommentNumber());
+		dataMapBean = (MapBean) getIntent().getParcelableExtra("mapBean");// get data from former intent
+		setDataToActivity(dataMapBean);
 		new Thread(new Runnable() {
-
 			@Override
 			public void run() {
 				textBitmap = returnBitMap(dataMapBean.getImageUrl());
@@ -162,21 +149,42 @@ public class NewsShowActivity extends BaseActivity implements Response {
 						+ "/newsDataFile" + File.separator + "qqshareimage.png";
 			}
 		}).start();
-		
-		//自己选择图片？
-//		image.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				Intent intent = new Intent();
-//				intent.setClass(NewsShowActivity.this,
-//						ImageChoiceActivity.class);
-//				startActivity(intent);
-//			}
-//		});
+		// 自己选择图片？
+		// image.setOnClickListener(new OnClickListener() {
+		//
+		// @Override
+		// public void onClick(View v) {
+		// // TODO Auto-generated method stub
+		// Intent intent = new Intent();
+		// intent.setClass(NewsShowActivity.this,
+		// ImageChoiceActivity.class);
+		// startActivity(intent);
+		// }
+		// });
 	}
+	
+	private void setDataToActivity(MapBean mapBean){
+		titleString = dataMapBean.getTitle2().toString()
+				.replaceAll(nowName, application.getName().toString());
+		dataMapBean.setTitle2(titleString);
+		// Html.fromHtml("<font color=\"red\">Hello wold<font>");
+		title.setText(titleString);
+		time.setText(getDataTime());//
+		newsText = dataMapBean.getText().toString().replaceAll(nowName,
+						UtilMethod.changeColorAndAddClickable(application
+								.getName().toString(), "red"));
 
+		dataMapBean.setText(newsText);
+		nowName = application.getName().toString();
+		text.setText(Html.fromHtml(newsText, null,
+				new ClickableTagHandler(this)));// set with Html.fromHtml to
+												// show the color
+		text.setClickable(true);
+		text.setMovementMethod(LinkMovementMethod.getInstance());
+		commentsNumber.setText("评论数：" + dataMapBean.getCommentNumber());
+		mFiled = dataMapBean.getFiled();
+	}
+	
 	private void setOnClicListener() {
 		// TODO Auto-generated method stub
 		buttonClickListener = new OnClickListener() {
@@ -187,7 +195,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 					finish();
 					break;
 				case R.id.changeName:
-					changeNameV2();
+					changeNameV2(mFiled);
 					break;
 				case R.id.weixinFriendNow:
 				case R.id.weixinFriend:
@@ -199,7 +207,6 @@ public class NewsShowActivity extends BaseActivity implements Response {
 					plaformId = 2;
 					requestGetForTargetUrl();
 					break;
-					
 				case R.id.qqButtonNow:
 				case R.id.qqButtom:
 					plaformId = 3;
@@ -212,7 +219,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 					break;
 				case R.id.guidText:
 				case R.id.guideButtonCancel:
-				//	guideText.setVisibility(View.INVISIBLE);
+					// guideText.setVisibility(View.INVISIBLE);
 					guideLinearLayout.setVisibility(View.INVISIBLE);
 					break;
 				default:
@@ -237,9 +244,9 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		title = (TextView) findViewById(R.id.textTitle);
 		time = (TextView) findViewById(R.id.textTime);
 		text = (TextView) findViewById(R.id.textReal);
-		guideLinearLayout=(LinearLayout)findViewById(R.id.guideLinearLayout);
-		guideText=(TextView)findViewById(R.id.guidText);
-		guideButtonCancel=(ImageButton)findViewById(R.id.guideButtonCancel);
+		guideLinearLayout = (LinearLayout) findViewById(R.id.guideLinearLayout);
+		guideText = (TextView) findViewById(R.id.guidText);
+		guideButtonCancel = (ImageButton) findViewById(R.id.guideButtonCancel);
 		commentsNumber = (TextView) findViewById(R.id.commentNumber);
 		image = (ImageView) findViewById(R.id.textImage);
 		qqButton = (ImageButton) findViewById(R.id.qqButtom);
@@ -272,95 +279,150 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		text.setText(Html.fromHtml(newsText));
 	}
 
-//	private void changeName() {
-//		LayoutInflater inflater2 = LayoutInflater.from(this);
-//		View view = inflater2.inflate(R.layout.change_name_dialog, null);
-//		final EditText tv = (EditText) view.findViewById(R.id.changeNameText);
-//		Button btSure = (Button) view.findViewById(R.id.butSurChange);
-//		Button btCancel = (Button) view.findViewById(R.id.butCancelChange);
-//		final Dialog dialog = new Dialog(this);
-//		dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-//		dialog.setContentView(view);
-//		dialog.show();
-//		btSure.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//
-//				name = tv.getText().toString();
-//				if (name.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*",
-//						"").length() != 0) {
-//					UtilMethod.showDialog(mContext,
-//							getResources().getString(R.string.name_cannot_use));
-//				} else {
-//					// 不包含特殊字符
-//					if ("".equalsIgnoreCase(name)) {
-//						UtilMethod.showDialog(mContext, getResources()
-//								.getString(R.string.input_alert));
-//					} else if (name.contains(" ")) {
-//						UtilMethod.showDialog(mContext, getResources()
-//								.getString(R.string.name_cannot_use));
-//					} else {
-//						try {
-//							String nameRequest = new String(name.getBytes(),
-//									"utf-8");
-//							nameRequest = URLEncoder.encode(name, "UTF-8"); // "UTF-8"
-//							requestGet(nameRequest, dialog);
-//						} catch (UnsupportedEncodingException e) {
-//							// TODO Auto-generated catch block
-//							e.printStackTrace();
-//						}
-//					}
-//				}
-//			}
-//		});
-//
-//		btCancel.setOnClickListener(new OnClickListener() {
-//
-//			@Override
-//			public void onClick(View v) {
-//				// TODO Auto-generated method stub
-//				dialog.dismiss();
-//			}
-//		});
-//	}
+	// private void changeName() {
+	// LayoutInflater inflater2 = LayoutInflater.from(this);
+	// View view = inflater2.inflate(R.layout.change_name_dialog, null);
+	// final EditText tv = (EditText) view.findViewById(R.id.changeNameText);
+	// Button btSure = (Button) view.findViewById(R.id.butSurChange);
+	// Button btCancel = (Button) view.findViewById(R.id.butCancelChange);
+	// final Dialog dialog = new Dialog(this);
+	// dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	// dialog.setContentView(view);
+	// dialog.show();
+	// btSure.setOnClickListener(new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	//
+	// name = tv.getText().toString();
+	// if (name.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*",
+	// "").length() != 0) {
+	// UtilMethod.showDialog(mContext,
+	// getResources().getString(R.string.name_cannot_use));
+	// } else {
+	// // 不包含特殊字符
+	// if ("".equalsIgnoreCase(name)) {
+	// UtilMethod.showDialog(mContext, getResources()
+	// .getString(R.string.input_alert));
+	// } else if (name.contains(" ")) {
+	// UtilMethod.showDialog(mContext, getResources()
+	// .getString(R.string.name_cannot_use));
+	// } else {
+	// try {
+	// String nameRequest = new String(name.getBytes(),
+	// "utf-8");
+	// nameRequest = URLEncoder.encode(name, "UTF-8"); // "UTF-8"
+	// requestGet(nameRequest, dialog);
+	// } catch (UnsupportedEncodingException e) {
+	// // TODO Auto-generated catch block
+	// e.printStackTrace();
+	// }
+	// }
+	// }
+	// }
+	// });
+	//
+	// btCancel.setOnClickListener(new OnClickListener() {
+	//
+	// @Override
+	// public void onClick(View v) {
+	// // TODO Auto-generated method stub
+	// dialog.dismiss();
+	// }
+	// });
+	// }
 
-	private void changeNameV2() {
+	private void changeNameV2(final int filed) {
 		LayoutInflater inflater2 = LayoutInflater.from(this);
 		View view = inflater2.inflate(R.layout.v2change_name_dialog, null);
-		final EditText etvName = (EditText) view.findViewById(R.id.changeNameText);
-		final EditText etvSecond=(EditText) view.findViewById(R.id.changeSecondText);
-		final TextView tvNameAlert=(TextView)view.findViewById(R.id.nameAlertText);
-		final TextView tvSecondAlert=(TextView)view.findViewById(R.id.secondAlertText);
+		final EditText etvName = (EditText) view
+				.findViewById(R.id.changeNameText);
+		final EditText etvSecond = (EditText) view
+				.findViewById(R.id.changeSecondText);
+		final TextView tvNameAlert = (TextView) view
+				.findViewById(R.id.nameAlertText);
+		final TextView tvSecondAlert = (TextView) view
+				.findViewById(R.id.secondAlertText);
+		final TextView secondTextTitle = (TextView) view
+				.findViewById(R.id.secondText);
 		Button btSure = (Button) view.findViewById(R.id.butSurChange);
-		changeDialog.getWindow().setBackgroundDrawableResource(R.drawable.circle_bg);
+		changeDialog.getWindow().setBackgroundDrawableResource(
+				R.drawable.circle_bg);
 		changeDialog.setContentView(view);
 		changeDialog.show();
+		setSecondFiled(filed,etvSecond,secondTextTitle,tvSecondAlert);
 		btSure.setOnClickListener(new OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
-				nameDetectResult=false;
-				secondDetectResult=false;
-				name = etvName.getText().toString();
-				tvNameAlert.setText("");//
-				detectStringFromServer(name,tvNameAlert,nameDetectResult,0);
-				
-				secondStr=etvSecond.getText().toString();
-				tvSecondAlert.setText("");
-				detectStringFromServer(secondStr,tvSecondAlert,secondDetectResult,1);
+				nameDetectResult = false;
+				secondDetectResult = false;
+				switch (filed) {
+				case 1:// just name filed
+					name = etvName.getText().toString();
+					tvNameAlert.setText("");//
+					detectStringFromServer(name, tvNameAlert, nameDetectResult,
+							0);
+					break;
+				case 12:// name + school
+				case 13:
+				case 14:
+				case 15:
+					secondStr = etvSecond.getText().toString();
+					tvSecondAlert.setText("");
+					detectStringFromServer(secondStr, tvSecondAlert,
+							secondDetectResult, 1);
+					name = etvName.getText().toString();
+					tvNameAlert.setText("");//
+					detectStringFromServer(name, tvNameAlert, nameDetectResult,
+							0);
+					break;
+				default:
+					break;
+				}
+
 			}
 		});
+	}
+	
+	private void setSecondFiled(int filed,EditText eText,TextView titleText,TextView alert){
+		switch (filed) {
+		case 1:// just name filed
+			eText.setVisibility(View.GONE);
+			alert.setVisibility(View.GONE);
+			titleText.setVisibility(View.GONE);
+			break;
+		case 12:// name + school
+			secondFiled = "学校：";
+			break;
+		case 13:// name + school
+			secondFiled = "公司：";
+			break;
+		case 14:// name + school
+			secondFiled = "家乡：";
+			break;
+		case 15:// name + school
+			secondFiled = "？？：";
+			break;
+		default:
+			break;
+			
+		}
+		titleText.setText(secondFiled);
 	}
 	
 	private void shareInadeately() {
 		LayoutInflater inflater2 = LayoutInflater.from(this);
 		View view = inflater2.inflate(R.layout.share_imadelately, null);
-		ImageButton btWX = (ImageButton) view.findViewById(R.id.weixinFriendNow);
-		ImageButton btWxComment=(ImageButton)view.findViewById(R.id.commentNow);
-		ImageButton btQq=(ImageButton)view.findViewById(R.id.qqButtonNow);
-		ImageButton btSina=(ImageButton)view.findViewById(R.id.weiboButtonNow);
-		shareDialog.getWindow().setBackgroundDrawableResource(R.drawable.circle_bg);
+		ImageButton btWX = (ImageButton) view
+				.findViewById(R.id.weixinFriendNow);
+		ImageButton btWxComment = (ImageButton) view
+				.findViewById(R.id.commentNow);
+		ImageButton btQq = (ImageButton) view.findViewById(R.id.qqButtonNow);
+		ImageButton btSina = (ImageButton) view
+				.findViewById(R.id.weiboButtonNow);
+		shareDialog.getWindow().setBackgroundDrawableResource(
+				R.drawable.circle_bg);
 		shareDialog.setContentView(view);
 		shareDialog.show();
 		btWX.setOnClickListener(buttonClickListener);
@@ -368,43 +430,42 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		btSina.setOnClickListener(buttonClickListener);
 		btQq.setOnClickListener(buttonClickListener);
 	}
-	
-	private void detectStringFromServer(String str,TextView textView,boolean detectRet,int c){
-		if (str.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*",
-				"").length() != 0) {
-//			UtilMethod.showDialog(mContext,
-//					getResources().getString(R.string.name_cannot_use));
+
+	private void detectStringFromServer(String str, TextView textView,
+			boolean detectRet, int c) {
+		if (str.replaceAll("[\u4e00-\u9fa5]*[a-z]*[A-Z]*\\d*-*_*\\s*", "")
+				.length() != 0) {
+			// UtilMethod.showDialog(mContext,
+			// getResources().getString(R.string.name_cannot_use));
 			textView.setText(getResources().getString(R.string.name_cannot_use));
-			detectRet=false;
+			detectRet = false;
 		} else {
 			// 不包含特殊字符
 			if ("".equalsIgnoreCase(str)) {
-//				UtilMethod.showDialog(mContext, getResources()
-//						.getString(R.string.input_alert));
-				textView.setText(getResources()
-						.getString(R.string.input_alert));
-				detectRet=false;
+				// UtilMethod.showDialog(mContext, getResources()
+				// .getString(R.string.input_alert));
+				textView.setText(getResources().getString(R.string.input_alert));
+				detectRet = false;
 			} else if (str.contains(" ")) {
-//				UtilMethod.showDialog(mContext, getResources()
-//						.getString(R.string.name_cannot_use));
-				textView.setText(getResources()
-						.getString(R.string.name_cannot_use));
-				detectRet=false;
+				// UtilMethod.showDialog(mContext, getResources()
+				// .getString(R.string.name_cannot_use));
+				textView.setText(getResources().getString(
+						R.string.name_cannot_use));
+				detectRet = false;
 			} else {
 				try {
-					String nameRequest = new String(str.getBytes(),
-							"utf-8");
+					String nameRequest = new String(str.getBytes(), "utf-8");
 					nameRequest = URLEncoder.encode(str, "UTF-8"); // "UTF-8"
-					requestGet(nameRequest, textView,c);
+					requestGet(nameRequest, textView, c);
 				} catch (UnsupportedEncodingException e) {
 					// TODO Auto-generated catch block
-					detectRet=false;
+					detectRet = false;
 					e.printStackTrace();
 				}
 			}
 		}
 	}
-	
+
 	protected void onNewIntent(Intent intent) {
 		super.onNewIntent(intent);
 		mWeiboShareAPI.handleWeiboResponse(intent, this);
@@ -427,8 +488,8 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		}
 	}
 
-	private void requestGet(final String iname, final TextView textView,final int catory)
-			throws UnsupportedEncodingException {
+	private void requestGet(final String iname, final TextView textView,
+			final int catory) throws UnsupportedEncodingException {
 		checkNameProgress.setVisibility(View.VISIBLE);
 		final DataGetRequest request = new DataGetRequest();
 		request.setParam(ServerConstants.REQUEST_REPLACE_NAME + iname);
@@ -442,22 +503,21 @@ public class NewsShowActivity extends BaseActivity implements Response {
 							.unmarshalFromString(data.toString(),
 									ApiCommonJsonResponse.class);
 					if (response.isRet()) {
-						if(catory==0){//name
-							nameDetectResult=true;
-						}else{//second
-							secondDetectResult=true;
+						if (catory == 0) {// name
+							nameDetectResult = true;
+						} else {// second
+							secondDetectResult = true;
 						}
 						application.setName(name);
 						setDataMapBeanTopage(dataMapBean);
-						if(nameDetectResult&&secondDetectResult){				
+						if (nameDetectResult && secondDetectResult) {
 							changeDialog.dismiss();
 						}
-						
+
 					} else {
-//						UtilMethod.showDialog(mContext, response.getErrMsg()
-//								.toString());
-						textView.setText(response.getErrMsg()
-								.toString());
+						// UtilMethod.showDialog(mContext, response.getErrMsg()
+						// .toString());
+						textView.setText(response.getErrMsg().toString());
 					}
 				}
 			}
@@ -567,7 +627,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 			} else {
 				StatService.onEvent(this, "sqq3", "qq share", 1);
 			}
-//			LoginUtil.loginByAct(this, "qq", null);
+			// LoginUtil.loginByAct(this, "qq", null);
 			break;
 		case 4:
 			mWeiboShareAPI = WeiboShareSDK.createWeiboAPI(
@@ -597,8 +657,6 @@ public class NewsShowActivity extends BaseActivity implements Response {
 		}
 		return thumbBmp2;
 	}
-
-
 
 	public static Bitmap returnBitMap(String url) {
 		URL myFileUrl = null;
@@ -636,7 +694,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 				image.setImageBitmap(textBitmap);
 				break;
 			case 2:
-				final String imagePath=msg.obj.toString();
+				final String imagePath = msg.obj.toString();
 				Bitmap temBitmap = BitmapFactory.decodeFile(imagePath);
 				image.setImageBitmap(temBitmap);
 				break;
@@ -645,7 +703,7 @@ public class NewsShowActivity extends BaseActivity implements Response {
 			}
 		}
 	};
-	
+
 	public class ClickableTagHandler implements TagHandler {
 		private int sIndex = 0;
 		private int eIndex = 0;
@@ -668,11 +726,12 @@ public class NewsShowActivity extends BaseActivity implements Response {
 			}
 		}
 	}
+
 	public class MxgsaSpan extends ClickableSpan implements OnClickListener {
 
 		@Override
 		public void onClick(View widget) {
-			changeNameV2();
+			changeNameV2(mFiled);
 		}
 	}
 }

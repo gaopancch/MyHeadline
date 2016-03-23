@@ -23,6 +23,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.letv.ugc.common.model.Information;
 import com.lxsj.myheadline.R;
 
 public class UtilMethod {
@@ -104,5 +105,20 @@ public class UtilMethod {
 			Log.i(UtilMethod.TAG, "IOException");
 			e.printStackTrace();
 		}
+	}
+	
+	public static MapBean informationToMapBean(Information information){
+		MapBean mapBean = new MapBean();
+		mapBean.setTitle(information.getTitle());
+		mapBean.setCommentNumber(""
+				+ information.getTotalcomment());
+		mapBean.setText(information.getContent());
+		mapBean.setTitle2(information.getSummary());
+		mapBean.setImageUrl(information.getImageurl());
+		mapBean.setId(Long.parseLong(information
+				.getId().toString()));
+		//mapBean.setAssort(ass);
+		//mapBean.setFiled("12");
+		return mapBean;
 	}
 }
